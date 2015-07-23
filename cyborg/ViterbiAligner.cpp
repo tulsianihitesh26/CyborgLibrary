@@ -66,6 +66,11 @@ void ViterbiAligner::setNeuralNetworkMode(
 	m_neuralNetworkMode = neuralNetworkMode;
 }
 
+void ViterbiAligner::setPosteriorMode(
+		bool posteriorMode) {
+	m_posteriorMode = posteriorMode;
+}
+
 void ViterbiAligner::setBeamWidth(
 		Number beamWidth) {
 	m_am.setBeamWidth(beamWidth);
@@ -92,7 +97,7 @@ void ViterbiAligner::createFST(
 // User required alignment is backtraced from the tree and results are written in cyborgResults container.
 void ViterbiAligner::doAlignment(
 		Number2DArrayRef mfcc) {
-//	posteriorFid.open((m_workDir+"//"+m_fileName+"_posteriors.txt").c_str());
+	//posteriorFid.open((m_workDir+"//"+m_fileName+"_posteriors.txt").c_str());
 
 // Create first node of Viterbi tree
 	IntArray senoneScores;
@@ -113,14 +118,33 @@ void ViterbiAligner::doAlignment(
 	// Initialize for forward/backward alignment
 	int TotalFrames = mfcc.size();
 	int from = 1, to = TotalFrames, step = 1;
+	// Set posterior array to read
+	Number2DArray posterior;
 	if (m_backwardFA) {
-		senoneScores = posteriorScores(mfcc[TotalFrames - 1]);
+		if (m_posteriorMode){
+			// Read all Posteriors first and then use as needed
+
+			string posteriorfileName = "D:\\Hitesh\\CYBORG\\Number\\phseg\\_posteriors.txt";
+			m_am.nn.readPosteriors(posteriorfileName,posterior);
+			senoneScores = posteriorScores(posterior[TotalFrames - 1]);
+		} else {
+			senoneScores = posteriorScores(mfcc[TotalFrames - 1]);
+		}
 		root->observationId = TotalFrames - 1;
 		from = TotalFrames - 2;
 		to = -1;
 		step = -1;
 	} else {
-		senoneScores = posteriorScores(mfcc[0]);
+		if (m_posteriorMode){
+			//	Read all Posteriors first and then use as needed
+			//Number2DArray posterior;
+			string posteriorfileName = "D:\\Hitesh\\CYBORG\\Number\\phseg\\_posteriors.txt";
+			m_am.nn.readPosteriors(posteriorfileName,posterior);
+			senoneScores = posteriorScores(posterior[0]);
+		} else {
+					senoneScores = posteriorScores(mfcc[0]);
+		}
+		//senoneScores = posteriorScores(mfcc[0]);
 		root->observationId = 0;
 	}
 
@@ -139,8 +163,11 @@ void ViterbiAligner::doAlignment(
 
 // Start building Viterbi tree
 	for (int i = from; i != to; i += step) {
-		senoneScores = posteriorScores(mfcc[i]);
-
+		if (m_posteriorMode){
+			senoneScores = posteriorScores(posterior[i]);
+		} else {
+			senoneScores = posteriorScores(mfcc[i]);
+		}
 		for (int j = 0; j < (int) NodeListCurrentTimeFrame.size(); j++) {
 			LatticeLinkedList * curTreeNode = NodeListCurrentTimeFrame[j];
 
@@ -302,7 +329,7 @@ void ViterbiAligner::doAlignment(
 	}
 
 	deleteTree(NodeListCurrentTimeFrame); // delete Viterbi tree
-//	posteriorFid.close();
+	posteriorFid.close();
 }
 
 void ViterbiAligner::deleteTree(
@@ -338,15 +365,22 @@ IntArray ViterbiAligner::posteriorScores(
 		NumberArrayRef featVec) {
 	IntArray senoneScores;
 	if (m_neuralNetworkMode) {
-		// NN POSTERIORS
-		NumberArray posteriors;
-		m_am.nn.classify(featVec, posteriors);
-		senoneScores.resize(posteriors.size(), 0.0);
-		for (int i = 0; i < (int) posteriors.size(); i++) {
-//			posteriorFid<< posteriors[i]<< " ";
-			senoneScores[i] = (int) ((posteriors[i] == 0.0) ? LOGPROB_ZERO : AcousticModel::myLog(posteriors[i]));
+		if (m_posteriorMode){
+			senoneScores.resize(featVec.size(), 0.0);
+			for (int i = 0; i < (int) featVec.size(); i++) {
+				senoneScores[i] = (int) ((featVec[i] == 0.0) ? LOGPROB_ZERO : AcousticModel::myLog(featVec[i]));
+			}
+		} else {
+			// NN POSTERIORS
+			NumberArray posteriors;
+			m_am.nn.classify(featVec, posteriors);
+			senoneScores.resize(posteriors.size(), 0.0);
+			for (int i = 0; i < (int) posteriors.size(); i++) {
+				//posteriorFid<< posteriors[i]<< " ";
+				senoneScores[i] = (int) ((posteriors[i] == 0.0) ? LOGPROB_ZERO : AcousticModel::myLog(posteriors[i]));
+			}
+			//posteriorFid << endl;
 		}
-//		posteriorFid << endl;
 	} else {
 		// GMM POSTERIORS
 		senoneScores.resize(m_am.SENONES, 0.0);

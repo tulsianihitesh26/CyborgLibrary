@@ -124,6 +124,10 @@ public:
 			Number2DArrayRef first,
 			Number2DArrayRef second,
 			Number2DArrayRef multiply);
+
+	void NeuralNetwork::readPosteriors(
+			string posteriorfile,
+			Number2DArrayRef posterior);
 };
 
 } /* namespace std */

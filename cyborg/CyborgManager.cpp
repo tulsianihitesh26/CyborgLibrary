@@ -54,6 +54,10 @@ void CyborgManager::setNeuralNetworkMode(
 	aligner.setNeuralNetworkMode(neuralNetMode);
 }
 
+void CyborgManager::setPosteriorMode(
+		bool posteriorMode) {
+	aligner.setPosteriorMode(posteriorMode);
+}
 void CyborgManager::setBackTraceMode(
 		int backTraceMode) {
 	aligner.setBackTraceMode(backTraceMode);

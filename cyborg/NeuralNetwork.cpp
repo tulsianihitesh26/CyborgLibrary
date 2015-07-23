@@ -502,6 +502,7 @@ void NeuralNetwork::classify(
 	nnff(locFeatMat, dummy);
 	testing = 0;
 	outPosteriors = a[n - 1][0];
+	cout << "In classify";
 
 }
 
@@ -613,4 +614,36 @@ StringArray NeuralNetwork::string2words(
 	return tokens;
 }
 
+void NeuralNetwork::readPosteriors(string posteriorpath, Number2DArrayRef posterior)
+ {
+	//cout << "In Read Posteriors: "<<endl;
+	//cout << posteriors << " ";
+	ifstream posteriorfile(posteriorpath.c_str());
+		if (!posteriorfile.is_open()) {
+			cout << "ERROR: Unable to open : " << posteriorpath << endl;
+			exit(0);
+		}
+		//cout << "Posterior file read";
+		string posteriorfileLine;
+		//Number2DArray posterior;
+		NumberArray temp;
+		while (getline(posteriorfile, posteriorfileLine)) { // Iterate through filenames in fileid file
+				string delimiter1 = " ";
+				int pos = 0;
+				string token;
+				while ((pos = posteriorfileLine.find(delimiter1)) != std::string::npos) {
+				        //cout << pos<<endl;
+						token = posteriorfileLine.substr(0, pos);
+				        posteriorfileLine.erase(0, pos + delimiter1.length());
+				        //cout << "Posterior erased";
+				        temp.push_back(stof(token));
+				}
+				posterior.push_back(temp);
+				temp.clear();
+				//cout << posterior[0]<<endl;
+		}
+		//return posterior;
+		cout << "Posteriors read!!";
+
+ }
 } /* namespace std */

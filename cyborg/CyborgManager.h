@@ -45,6 +45,8 @@ public:
 			string fstName);
 	void setNeuralNetworkMode(
 			bool neuralNetMode);
+	void setPosteriorMode(
+				bool posteriorMode);
 	void setBackTraceMode(
 			int backTraceMode);
 	void setBeamWidth(

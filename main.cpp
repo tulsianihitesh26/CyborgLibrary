@@ -73,6 +73,7 @@ int main(
 	bool freeDecodeFlag = false;
 
 	bool neuralNetMode = false;
+	bool posteriorMode = false;
 
 	int backTraceMode = 2; //		a) backTraceMode =0 : choose leaf only if reached SIL
 						   //		b) backTraceMode =1 : choose best likelihood - dont bother what alignment
@@ -170,8 +171,13 @@ int main(
 			int nnFlag = atoi(argv[++i]);
 			if (nnFlag == 1) {
 				neuralNetMode = true;
+				posteriorMode = false;
+			} else if (nnFlag == 2){
+				neuralNetMode = true;
+				posteriorMode = true;
 			} else {
 				neuralNetMode = false;
+				posteriorMode = false;
 			}
 		}
 		if (strcmp(argv[i], "-help") == 0) {
@@ -190,6 +196,7 @@ int main(
 	myDecoder.setBeamWidth(beamWidth);
 	myDecoder.setBackwardFA(backwardFA);
 	myDecoder.setDecoderMode(freeDecodeFlag);
+	myDecoder.setPosteriorMode(posteriorMode);
 
 	myDecoder.setWorkingDirectory(phsegDir);
 	if (globalFstFlag) {

@@ -45,7 +45,7 @@ private:
 	bool m_decoderFlag;
 
 	bool m_neuralNetworkMode;
-
+    bool m_posteriorMode;
 	ofstream posteriorFid;
 
 public:
@@ -76,6 +76,8 @@ public:
 
 	void setNeuralNetworkMode(
 			bool neuralNetworkMode);
+	void setPosteriorMode(
+				bool posteriorMode);
 	void setBeamWidth(
 			Number beamWidth);
 	void setBackwardFA(
