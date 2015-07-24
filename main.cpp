@@ -63,6 +63,7 @@ int main(
 
 	string audDir;
 	string phsegDir;
+	string posteriorDir;
 
 	int fstFlag = 1;
 	string globalFstName; // if fstFlag==2, then default fst to be used for all
@@ -112,6 +113,9 @@ int main(
 		if (strcmp(argv[i], "-phseg") == 0) {
 			phsegDir = argv[++i];
 			minArgCnt++;
+		}
+		if (strcmp(argv[i], "-post") == 0) {
+			posteriorDir = argv[++i];
 		}
 		if (strcmp(argv[i], "-fst") == 0) {
 			fstFlag = atoi(argv[++i]);
@@ -256,8 +260,13 @@ int main(
 
 				// For neural network mode, add context frames
 				if (neuralNetMode) {
-					myDecoder.getContextMFCCFrames(mfccMatrix);
+					if (posteriorMode){
+						myDecoder.setPosteriorPath(posteriorDir,fileId);
+					} else {
+						myDecoder.getContextMFCCFrames(mfccMatrix);
+					}
 				}
+
 
 				// Perform alignment using Viterbi tree
 				myDecoder.doAlignment(mfccMatrix);

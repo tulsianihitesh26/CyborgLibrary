@@ -30,6 +30,12 @@ void CyborgManager::setAM(
 	aligner.initAM(amPath);
 }
 
+void CyborgManager::setPosteriorPath(
+		string posteriorPath,
+		string fileId) {
+	aligner.setPosteriorPath(posteriorPath,fileId);
+}
+
 void CyborgManager::loadDictionary(
 		string dictPath,
 		string fillerDictPath) {
@@ -58,6 +64,7 @@ void CyborgManager::setPosteriorMode(
 		bool posteriorMode) {
 	aligner.setPosteriorMode(posteriorMode);
 }
+
 void CyborgManager::setBackTraceMode(
 		int backTraceMode) {
 	aligner.setBackTraceMode(backTraceMode);

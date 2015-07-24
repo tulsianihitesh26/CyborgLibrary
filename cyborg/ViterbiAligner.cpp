@@ -39,6 +39,13 @@ void ViterbiAligner::initAM(
 	}
 }
 
+void ViterbiAligner::setPosteriorPath(
+		string posteriorPath,
+		string fileId) {
+		m_posteriorPath = posteriorPath + "/" + fileId + ".post";
+		cout << m_posteriorPath<<endl;
+}
+
 void ViterbiAligner::initFST(
 		string fstPath,
 		string fstName) {
@@ -123,9 +130,7 @@ void ViterbiAligner::doAlignment(
 	if (m_backwardFA) {
 		if (m_posteriorMode){
 			// Read all Posteriors first and then use as needed
-
-			string posteriorfileName = "D:\\Hitesh\\CYBORG\\Number\\phseg\\_posteriors.txt";
-			m_am.nn.readPosteriors(posteriorfileName,posterior);
+			m_am.nn.readPosteriors(m_posteriorPath,posterior);
 			senoneScores = posteriorScores(posterior[TotalFrames - 1]);
 		} else {
 			senoneScores = posteriorScores(mfcc[TotalFrames - 1]);
@@ -137,9 +142,7 @@ void ViterbiAligner::doAlignment(
 	} else {
 		if (m_posteriorMode){
 			//	Read all Posteriors first and then use as needed
-			//Number2DArray posterior;
-			string posteriorfileName = "D:\\Hitesh\\CYBORG\\Number\\phseg\\_posteriors.txt";
-			m_am.nn.readPosteriors(posteriorfileName,posterior);
+			m_am.nn.readPosteriors(m_posteriorPath,posterior);
 			senoneScores = posteriorScores(posterior[0]);
 		} else {
 					senoneScores = posteriorScores(mfcc[0]);

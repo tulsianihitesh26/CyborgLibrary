@@ -502,7 +502,6 @@ void NeuralNetwork::classify(
 	nnff(locFeatMat, dummy);
 	testing = 0;
 	outPosteriors = a[n - 1][0];
-	cout << "In classify";
 
 }
 

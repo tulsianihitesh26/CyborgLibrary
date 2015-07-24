@@ -32,6 +32,7 @@ private:
 
 	string m_workDir;
 	string m_fileName;
+	string m_posteriorPath;
 
 	int m_backTraceMode;
 	int m_nBest;
@@ -74,6 +75,9 @@ public:
 	void setBackTraceMode(
 			int backTraceMode);
 
+	void ViterbiAligner::setPosteriorPath(
+			string posteriorPath,
+			string fileId);
 	void setNeuralNetworkMode(
 			bool neuralNetworkMode);
 	void setPosteriorMode(

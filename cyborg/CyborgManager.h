@@ -71,7 +71,9 @@ public:
 	void writeMFCC(
 			string fileName,
 			Number2DArrayRef feat);
-
+	void CyborgManager::setPosteriorPath(
+			string posteriorPath,
+			string fileId);
 	void doAlignment(
 			Number2DArrayRef mfcc);
 
