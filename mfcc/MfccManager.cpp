@@ -224,6 +224,32 @@ Number2DArray MfccManager::readFeatFile(
 	return featMat;
 }
 
+Number2DArray MfccManager::readPostFeatFile(
+		string featDir,
+		string fileId) {
+	Number2DArray featMat;
+	ifstream featFile((featDir + "/" + fileId).c_str());
+	string line;
+
+	if (featFile.is_open()) {
+		while (getline(featFile, line)) {
+			NumberArray featVec;
+			Number featVal;
+			stringstream ss(line);
+			while (ss >> featVal) {
+				featVec.push_back(featVal);
+			}
+			featMat.push_back(featVec);
+		}
+		featFile.close();
+	} else {
+		cout << "ERROR: Failed to open " << (featDir + "/" + fileId + ".post").c_str() << endl;
+		exit(0);
+	}
+
+	return featMat;
+}
+
 void MfccManager::getContextMFCCFrames(
 		Number2DArrayRef mfccMatrix) {
 	Number2DArray oldMFCCMatrix(mfccMatrix);

@@ -52,6 +52,9 @@ public:
 	Number2DArray readFeatFile(
 			string featDir,
 			string fileId);
+	Number2DArray readPostFeatFile(
+				string featDir,
+				string fileId);
 	void printFeatures(
 			Number2DArrayRef feat);
 	void writeMFCC(

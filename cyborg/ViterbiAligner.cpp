@@ -128,25 +128,25 @@ void ViterbiAligner::doAlignment(
 	// Set posterior array to read
 	Number2DArray posterior;
 	if (m_backwardFA) {
-		if (m_posteriorMode){
+		//if (m_posteriorMode){
 			// Read all Posteriors first and then use as needed
-			m_am.nn.readPosteriors(m_posteriorPath,posterior);
-			senoneScores = posteriorScores(posterior[TotalFrames - 1]);
-		} else {
+		//	m_am.nn.readPosteriors(m_posteriorPath,posterior);
+		//	senoneScores = posteriorScores(posterior[TotalFrames - 1]);
+		//} else {
 			senoneScores = posteriorScores(mfcc[TotalFrames - 1]);
-		}
+		//}
 		root->observationId = TotalFrames - 1;
 		from = TotalFrames - 2;
 		to = -1;
 		step = -1;
 	} else {
-		if (m_posteriorMode){
+		//if (m_posteriorMode){
 			//	Read all Posteriors first and then use as needed
-			m_am.nn.readPosteriors(m_posteriorPath,posterior);
-			senoneScores = posteriorScores(posterior[0]);
-		} else {
+		//	m_am.nn.readPosteriors(m_posteriorPath,posterior);
+		//	senoneScores = posteriorScores(posterior[0]);
+		//} else {
 					senoneScores = posteriorScores(mfcc[0]);
-		}
+		//}
 		//senoneScores = posteriorScores(mfcc[0]);
 		root->observationId = 0;
 	}
@@ -166,11 +166,11 @@ void ViterbiAligner::doAlignment(
 
 // Start building Viterbi tree
 	for (int i = from; i != to; i += step) {
-		if (m_posteriorMode){
-			senoneScores = posteriorScores(posterior[i]);
-		} else {
+		//if (m_posteriorMode){
+		//	senoneScores = posteriorScores(posterior[i]);
+		//} else {
 			senoneScores = posteriorScores(mfcc[i]);
-		}
+		//}
 		for (int j = 0; j < (int) NodeListCurrentTimeFrame.size(); j++) {
 			LatticeLinkedList * curTreeNode = NodeListCurrentTimeFrame[j];
 
@@ -372,7 +372,9 @@ IntArray ViterbiAligner::posteriorScores(
 			senoneScores.resize(featVec.size(), 0.0);
 			for (int i = 0; i < (int) featVec.size(); i++) {
 				senoneScores[i] = (int) ((featVec[i] == 0.0) ? LOGPROB_ZERO : AcousticModel::myLog(featVec[i]));
+				//cout << senoneScores[i] << " ";
 			}
+			//cout << "\n";
 		} else {
 			// NN POSTERIORS
 			NumberArray posteriors;
@@ -381,7 +383,9 @@ IntArray ViterbiAligner::posteriorScores(
 			for (int i = 0; i < (int) posteriors.size(); i++) {
 				//posteriorFid<< posteriors[i]<< " ";
 				senoneScores[i] = (int) ((posteriors[i] == 0.0) ? LOGPROB_ZERO : AcousticModel::myLog(posteriors[i]));
+
 			}
+
 			//posteriorFid << endl;
 		}
 	} else {

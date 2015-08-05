@@ -251,11 +251,14 @@ int main(
 
 				// Calcualte MFCC if necessary
 				Number2DArray mfccMatrix;
-				if (calcMfcc) {
-					mfccMatrix = myDecoder.computeMFCC(audDir, fileId);
-
+				if (posteriorMode){
+					mfccMatrix = myDecoder.readPosteriorFile(posteriorDir, fileId);
 				} else {
-					mfccMatrix = myDecoder.readMFCCFile(audDir, fileId);
+					if (calcMfcc) {
+						mfccMatrix = myDecoder.computeMFCC(audDir, fileId);
+					} else {
+						mfccMatrix = myDecoder.readMFCCFile(audDir, fileId);
+					}
 				}
 
 				// For neural network mode, add context frames

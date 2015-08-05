@@ -108,6 +108,12 @@ Number2DArray CyborgManager::readMFCCFile(
 	return mfccManager.readFeatFile(filePath, fileName);
 }
 
+Number2DArray CyborgManager::readPosteriorFile(
+		string filePath,
+		string fileName) {
+	return mfccManager.readPostFeatFile(filePath, fileName);
+}
+
 void CyborgManager::getContextMFCCFrames(
 		Number2DArrayRef mfccMatrix) {
 	mfccManager.getContextMFCCFrames(mfccMatrix);

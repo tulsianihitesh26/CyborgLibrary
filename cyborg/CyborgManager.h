@@ -13,6 +13,7 @@
 #include "ViterbiAligner.h"
 #include "CyborgResults.h"
 #include "params.h"
+
 namespace std {
 
 class CyborgManager {
@@ -64,6 +65,9 @@ public:
 	Number2DArray readMFCCFile(
 			string filePath,
 			string fileName);
+	Number2DArray readPosteriorFile(
+				string filePath,
+				string fileName);
 	void getContextMFCCFrames(
 			Number2DArrayRef mfccMatrix);
 	void printMFCC(

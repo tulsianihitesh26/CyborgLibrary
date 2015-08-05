@@ -638,11 +638,17 @@ void NeuralNetwork::readPosteriors(string posteriorpath, Number2DArrayRef poster
 				        temp.push_back(stof(token));
 				}
 				posterior.push_back(temp);
+				//for (int q=0;q<temp.size();q++)
+				//{
+				//	cout << temp[q] <<" ";
+				//}
+				//cout << "\n";
 				temp.clear();
-				//cout << posterior[0]<<endl;
+				//cout << posterior<<endl;
 		}
 		//return posterior;
 		cout << "Posteriors read!!";
 
  }
+
 } /* namespace std */

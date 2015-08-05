@@ -54,6 +54,10 @@ public:
 			string nnFileName);
 	virtual ~NeuralNetwork();
 
+	void NeuralNetwork::readPosteriors(
+			string posteriorpath,
+			Number2DArrayRef posterior);
+
 	void classify(
 			Number2DArrayRef featMat,
 			Number2DArrayRef outPosteriors);
@@ -125,10 +129,7 @@ public:
 			Number2DArrayRef second,
 			Number2DArrayRef multiply);
 
-	void NeuralNetwork::readPosteriors(
-			string posteriorfile,
-			Number2DArrayRef posterior);
-};
+	};
 
 } /* namespace std */
 #endif /* NEURALNETWORK_H_ */
